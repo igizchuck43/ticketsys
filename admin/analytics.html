@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - EventTix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#d97706',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-white font-inter min-h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="bg-gray-800 w-64 min-h-screen flex-shrink-0 hidden md:block transition-all duration-300 ease-in-out">
+        <div class="p-4 border-b border-gray-700">
+            <a href="dashboard.html" class="text-amber-600 font-bold text-xl">EventTix Admin</a>
+        </div>
+        <nav class="p-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="events.html" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span>Events</span>
+            </a>
+            <a href="bookings.html" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <span>Bookings</span>
+            </a>
+            <a href="users.html" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <span>Users</span>
+            </a>
+            <a href="analytics.html" class="flex items-center space-x-3 text-amber-600 p-3 rounded-lg bg-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Bar -->
+        <header class="bg-gray-800 border-b border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-300 hover:text-amber-600" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <!-- Date Range Selector -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <select class="bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-amber-600">
+                        <option value="7days">Last 7 Days</option>
+                        <option value="30days">Last 30 Days</option>
+                        <option value="90days">Last 90 Days</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button onclick="document.getElementById('userMenu').classList.toggle('hidden')" class="flex items-center space-x-3 text-gray-300 hover:text-amber-600 focus:outline-none">
+                        <span>Admin User</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5">
+                        <div class="py-1" role="menu" aria-orientation="vertical">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-600" role="menuitem">Your Profile</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-600" role="menuitem">Settings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-600" role="menuitem">Sign out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Analytics Content -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900 p-6">
+            <div class="container mx-auto">
+                <h1 class="text-3xl font-semibold text-white mb-6">Analytics Overview</h1>
+
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Revenue -->
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total Revenue</p>
+                                <p class="text-2xl font-semibold text-white">$45,678</p>
+                            </div>
+                            <div class="p-3 bg-amber-600 bg-opacity-20 rounded-full">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm font-semibold">+15%</span>
+                            <span class="text-gray-400 text-sm"> vs last period</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Bookings -->
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total Bookings</p>
+                                <p class="text-2xl font-semibold text-white">1,234</p>
+                            </div>
+                            <div class="p-3 bg-amber-600 bg-opacity-20 rounded-full">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm font-semibold">+8%</span>
+                            <span class="text-gray-400 text-sm"> vs last period</span>
+                        </div>
+                    </div>
+
+                    <!-- Average Order Value -->
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Avg Order Value</p>
+                                <p class="text-2xl font-semibold text-white">$37.50</p>
+                            </div>
+                            <div class="p-3 bg-amber-600 bg-opacity-20 rounded-full">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm font-semibold">+5%</span>
+                            <span class="text-gray-400 text-sm"> vs last period</span>
+                        </div>
+                    </div>
+
+                    <!-- Conversion Rate -->
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Conversion Rate</p>
+                                <p class="text-2xl font-semibold text-white">3.2%</p>
+                            </div>
+                            <div class="p-3 bg-amber-600 bg-opacity-20 rounded-full">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-green-400 text-sm font-semibold">+0.5%</span>
+                            <span class="text-gray-400 text-sm"> vs last period</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Revenue Trend Chart -->
+                    <div class="bg-gray-800 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold text-white mb-4">Revenue Trend</h2>
+                        <div class="relative" style="height: 300px;">
+                            <canvas id="revenueTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Popular Events Chart -->
+                    <div class="bg-gray-800 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold text-white mb-4">Popular Events</h2>
+                        <div class="relative" style="height: 300px;">
+                            <canvas id="popularEventsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Analytics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- User Demographics -->
+                    <div class="bg-gray-800 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold text-white mb-4">User Demographics</h2>
+                        <div class="relative" style="height: 300px;">
+                            <canvas id="demographicsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Sales by Category -->
+                    <div class="bg-gray-800 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold text-white mb-4">Sales by Category</h2>
+                        <div class="relative" style="height: 300px;">
+                            <canvas id="salesByCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Charts Initialization -->
+    <script>
+        // Revenue Trend Chart
+        const revenueTrendCtx = document.getElementById('revenueTrendChart').getContext('2d');
+        new Chart(revenueTrendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [30000, 35000, 32000, 38000, 42000, 45000],
+                    borderColor: '#d97706',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#374151'
+                        },
+                        ticks: {
+                            color: '#9CA3AF',
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#374151'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Popular Events Chart
+        const popularEventsCtx = document.getElementById('popularEventsChart').getContext('2d');
+        new Chart(popularEventsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Summer Festival', 'Concert Night', 'Theater Show', 'Sports Event', 'Comedy Night'],
+                datasets: [{
+                    label: 'Tickets Sold',
+                    data: [500, 420, 380, 350, 300],
+                    backgroundColor: '#d97706',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#374151'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#374151'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Demographics Chart
+        const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+        new Chart(demographicsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['18-24', '25-34', '35-44', '45-54', '55+'],
+                datasets: [{
+                    data: [25, 35, 20, 15, 5],
+                    backgroundColor: [
+                        '#d97706',
+                        '#92400e',
+                        '#b45309',
+                        '#78350f',
+                        '#a16207'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Sales by Category Chart
+        const salesByCategoryCtx = document.getElementById('salesByCategoryChart').getContext('2d');
+        new Chart(salesByCategoryCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Music', 'Sports', 'Theater', 'Comedy', 'Other'],
+                datasets: [{
+                    data: [40, 20, 15, 15, 10],
+                    backgroundColor: [
+                        '#d97706',
+                        '#92400e',
+                        '#b45309',
+                        '#78350f',
+                        '#a16207'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
